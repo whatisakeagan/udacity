@@ -279,6 +279,45 @@ def user_stats(df, city):
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
+def view_data(df):
+    """
+    Loads data for the specified city and filters by month and day if applicable.
+    Displays raw data to users 5 rows at a time
+    Args:
+        (DataFrame) df - the dataset we filtered by city and (maybe) day/month in load_data
+    Returns:
+        NA
+    """
+    data_yn = ''
+    while data_yn == '':
+        data_prompt = input('\nDo you want to see the raw data that made up your queries? (Y/N)\n').lower()
+        if data_prompt == 'y' or data_prompt == 'yes':
+            data_yn = 'y'
+            break
+        elif data_prompt == 'n' or data_prompt == 'no':
+            data_yn = 'n'
+            print('Okay, no worries!\n')
+        else:
+            print('Hm, I don\'t understand. Can you answer yes or no by typing Y or N?')
+    if data_yn == 'y':
+        first = 0
+        last = 5
+        print(df.iloc[first:last, :])
+        data_more_yn = ''
+        while data_more_yn != 'n':
+            data_more_prompt = input('\nDo you want to see the next few rows of data? (Y/N)\n').lower()
+            if data_more_prompt == 'y' or data_more_prompt == 'yes':
+                data_more_yn = 'y'
+                first += 5
+                last += 5
+                print(df.iloc[first:last, :])
+            elif data_more_prompt == 'n' or data_more_prompt == 'no':
+                data_more_yn = 'n'
+                print('Okay, no worries!\n')
+                break
+            else:
+                print('Hm, I don\'t understand. Can you answer yes or no by typing Y or N?')
+
 
 def main():
     while True:
@@ -289,6 +328,7 @@ def main():
         station_stats(df, city)
         trip_duration_stats(df, city)
         user_stats(df, city)
+        view_data(df)
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             print('Thanks for exploring these data with me!')
